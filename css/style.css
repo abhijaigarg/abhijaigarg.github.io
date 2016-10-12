@@ -61,11 +61,12 @@ html, body{
 
 
 .tile{
-	margin-top:5px;
-	margin-left: 2px;
+	margin-top:1px;
+	margin-left: 1px;
 	float:left;
 	width:33%;
 	height:auto;
+	overflow-y:hidden;
 }
 
 .tile img{

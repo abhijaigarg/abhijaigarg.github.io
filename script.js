@@ -7,17 +7,30 @@ function populate_grid(data, _search_results){
 	else
 	{
 		video_items = new Array();
+		var _new_div = '';
 		for(var i=0; i < data.number_of_results; i++){
 
 			var _id = data.results[i]['id'];
-			var _new_div;
-			
-			_new_div = "<div class='tile'><a href='http://labocine.com/film/" + _id + "'><video id='_" + String(i) + "' preload='none'><source src='" + data.results[i]['url'] + "'></source></video><img src='http://labocine.com/stills/" + _id + ".jpg'/></a></div>";
+			var _temp_div = '';
+						
+			_temp_div = "<div class='tile'><a href='http://labocine.com/film/" + _id + "'><video id='_" + String(i) + "' preload='none'><source src='" + data.results[i]['url'] + "'></source></video><img src='http://labocine.com/stills/" + _id + ".jpg'/></a></div>";
 
-			
-			_search_results.append(_new_div);
-			video_items.push(Popcorn("#_" + String(i)));
+			if (i % 3 === 0){
+				if ( i === 0){
+					_new_div = "<div class='row'>" + _temp_div;
+				}
+				else if ( i == data.number_of_results - 1){
+					_new_div += _temp_div + "</div>";
+				}
+				else{
+					_new_div = _new_div + "</div><div class='row'>" + _temp_div;
+				}	
+			}
+			else{
+				_new_div += _temp_div;
+			}
 		}
+		_search_results.html(_new_div);
 
 	}
 }
@@ -54,7 +67,6 @@ function setup_video(i, snippets){
 		$(this).find('video').show();
 		cue_video(i, snippets);
 		video_items[i].play();
-		console.log(video_items[i].currentTime());
 		
 	});
 	$('#_' + String(i)).parent().parent().mouseleave(function(){
@@ -63,6 +75,12 @@ function setup_video(i, snippets){
 		video_items[i].pause();
 		video_items[i].currentTime(0);
 	});
+}
+
+function instantiate_video_popcorn(n){
+	for (var i = 0; i < n ; i++){
+		video_items.push(Popcorn("#_" + String(i)));	
+	}
 }
 
 function search_term(query_term){
@@ -77,14 +95,17 @@ function search_term(query_term){
 		dataType: 'json',
 		async: false,
 		error: function(data){
-			console.log(data);
+			console.log('error');
 		},
 		success: function(data){
 			$.when(populate_grid(data, _search_results)).done(function(){
-				for (var i = 0; i < data.number_of_results; i++){
-					setup_video(i, data.results[i]['snippets']);
-				}
-			})
+				$.when(instantiate_video_popcorn(data.number_of_results)).done(function(){
+					for (var i = 0; i < data.number_of_results; i++){
+						setup_video(i, data.results[i]['snippets']);
+					}
+				});
+
+			});
 		}
 	});
 
