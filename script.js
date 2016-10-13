@@ -114,6 +114,7 @@ function populate_modal_window(data, query_term, n){
 	montage = Popcorn.sequence('montage', sequence);
 
 	$('#myModal').modal('show');
+	montage.play();
 
 }
 
@@ -136,10 +137,10 @@ function search_term(query_term, play_type){
 		success: function(data){
 			if (data.number_of_results > 0){
 				if (play_type == 'montage'){
-					$.when(populate_modal_window(data, query_term, data.number_of_results)).done(function(){
-						montage.play();
-					});
+					populate_modal_window(data, query_term, data.number_of_results);
+					
 				}
+
 				else if (play_type == 'grid'){
 					$.when(populate_grid(data, _search_results)).done(function(){
 						$.when(instantiate_video_popcorn(data.number_of_results)).done(function(){
