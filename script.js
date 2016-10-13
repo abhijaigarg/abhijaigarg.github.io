@@ -13,7 +13,7 @@ function populate_grid(data, _search_results){
 			var _id = data.results[i]['id'];
 			var _temp_div = '';
 						
-			_temp_div = "<div class='tile'><a href='http://labocine.com/film/" + _id + "'><video id='_" + String(i) + "' preload='none'><source src='" + data.results[i]['url'] + "'></source></video><img src='http://labocine.com/stills/" + _id + ".jpg'/></a></div>";
+			_temp_div = "<div class='tile'><a href='http://labocine.com/film/" + _id + "'><div class='title'></div><video id='_" + String(i) + "' preload='none'><source src='" + data.results[i]['url'] + "'></source></video><img src='http://labocine.com/stills/" + _id + ".jpg'/></a></div>";
 
 			if (i % 3 === 0){
 				if ( i === 0){
@@ -38,7 +38,8 @@ function populate_grid(data, _search_results){
 function convert_to_secs(time){
 	time = time.split(',');
 	var hms = time[0].split(':');
-	return Date.UTC(1970, 0, 1, hms[0], hms[1], hms[2]) / 1000;
+	return parseFloat(String(Date.UTC(1970, 0, 1, hms[0], hms[1], hms[2]) / 1000) + '.' + time[1]);
+
 }
 
 function start_stop_times(i,j,snippets){
@@ -88,6 +89,8 @@ function search_term(query_term){
 	var query_URL = url + query_term;
 	var _search_results = $('.search-results');
 
+	$('#search-box input').val(query_term);
+
 	_search_results.empty();
 	$.ajax({
 		url: query_URL,
@@ -111,11 +114,27 @@ function search_term(query_term){
 
 }
 
+var getURLParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+
 $(document).ready(function(){
-	$('#search-box').submit(function(event){
-		event.preventDefault();
-		var _query = $('#search-box input').val()
-		search_term(_query);
-	});
+	var query_term = getURLParameter('search-term');
+
+	if (query_term !== undefined && query_term !== ''){
+		search_term(query_term);
+	}
+
 });
 	
