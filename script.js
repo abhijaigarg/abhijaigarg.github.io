@@ -47,7 +47,7 @@ function start_stop_times(popcorn_element,j,snippets){
 	
 	popcorn_element.cue(_end, function(){
 		if ( j == snippets.length - 1){
-			popcorn_element.pause();
+			popcorn_element.pause();	
 		}
 		else{
 			var _start = convert_to_secs(snippets[j+1]['start_time'])
@@ -66,7 +66,7 @@ function cue_video(popcorn_element, snippets){
 		popcorn_element.currentTime(convert_to_secs(snippets[0]['start_time']));
 	});
 	for (var j = 0; j < snippets.length; j++){
-		start_stop_times(popcorn_element,j,snippets);
+		start_stop_times(popcorn_element,j, snippets);
 	}
 }
 
@@ -92,17 +92,28 @@ function instantiate_video_popcorn(n){
 	}
 }
 
+function get_sequence(data){
+	var sequence = new Array();
+	for(var i = 0; i < data.number_of_results; i++){
+		for(var j = 0; j < data.results[i]['snippets'].length; j++){
+			var _in = convert_to_secs(data.results[i]['snippets'][j]['start_time']);
+			var _out = convert_to_secs(data.results[i]['snippets'][j]['end_time'])
+			var _cue = { src: data.results[i].url, in: _in, out: _out}
+			sequence.push(_cue);
+		}
+	} 
+	console.log(sequence);
+	return sequence;
+}
+
 function populate_modal_window(data, query_term, n){
 	$('.modal-title').html("Blast result for '" + query_term + "'");
 	
 	// set up first video and queue others
-	montage = Popcorn('#montage');
-	_montage_player = $('#montage');
+	var sequence = get_sequence(data);
 
-	_montage_player.attr("src", data.results[0]['url']);
-	for (var j = 0 ; j < data.results[0]['snippets'].length; j++){
-		cue_video(montage, data.results[0]['snippets']);
-	}
+	montage = Popcorn.sequence('montage', sequence);
+	montage.play();
 
 
 	$('#myModal').modal('show');
