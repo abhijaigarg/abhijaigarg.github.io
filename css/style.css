@@ -65,7 +65,7 @@ html, body{
 	margin-left:35px;
 }
 
-.navbar > .logo > img{
+.navbar > .logo > a img{
 	width:243px;
 
 }

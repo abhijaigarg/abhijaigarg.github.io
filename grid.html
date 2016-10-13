@@ -85,11 +85,8 @@
       $(document).ready(function(){
         var query_term = getURLParameter('search-term');
         if (query_term !== undefined && query_term !== ''){
-          search_term(query_term, 'montage');
+          search_term(query_term, 'grid');
         }
-        $('.modal-footer button').click(function(){
-          window.location.href = 'grid.html?search-term=' + query_term; 
-        });
       });
     </script>
   </body>

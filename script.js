@@ -177,21 +177,5 @@ var getURLParameter = function getUrlParameter(sParam) {
     }
 };
 
-$(document).ready(function(){
-	var query_term = getURLParameter('search-term');
-	var data;
-	if (query_term !== undefined && query_term !== ''){
-		search_term(query_term, 'montage');
-	}
 
-	$('.modal-footer button').click(function(){
-		$('#montage').empty();
-		// montage = null;
-		search_term(query_term, 'grid');
-	});
-	// $('.modal-header button').click(function(){
-	// 	$('#montage').empty();
-	// 	search_term(query_term, 'grid');
-	// });
-});
 	
