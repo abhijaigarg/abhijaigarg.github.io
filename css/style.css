@@ -30,6 +30,28 @@ html, body{
 	text-decoration: underline;
 }
 
+
+#myModal .modal-dialog {
+	width:80%;
+	border-radius: 0;
+}
+
+#myModal .modal-dialog .modal-content{
+	border-radius: 0;
+}
+
+#myModal .modal-dialog .modal-content .modal-body{
+	width: 100%;
+	text-align: center;
+}
+
+#myModal .modal-dialog .modal-content .modal-body #montage{
+	width:640px;
+	height:480px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .navbar{
 	height:65px;
 	width:100%;

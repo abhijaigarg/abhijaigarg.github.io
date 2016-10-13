@@ -1,64 +1,72 @@
 var video_items;
+var montage;
+
 
 function populate_grid(data, _search_results){
-	if (data.number_of_results == 0){
-		_search_results.append("No results found");
-	}
-	else
-	{
-		video_items = new Array();
-		var _new_div = '';
-		for(var i=0; i < data.number_of_results; i++){
+	
+	video_items = new Array();
+	var _new_div = '';
+	for(var i=0; i < data.number_of_results; i++){
 
-			var _id = data.results[i]['id'];
-			var _temp_div = '';
-						
-			_temp_div = "<div class='tile'><a href='http://labocine.com/film/" + _id + "'><div class='title'></div><video id='_" + String(i) + "' preload='none'><source src='" + data.results[i]['url'] + "'></source></video><img src='http://labocine.com/stills/" + _id + ".jpg'/></a></div>";
+		var _id = data.results[i]['id'];
+		var _temp_div = '';
+					
+		_temp_div = "<div class='tile'><a href='http://labocine.com/film/" + _id + "'><div class='title'></div><video id='_" + String(i) + "' preload='none'><source src='" + data.results[i]['url'] + "'></source></video><img src='http://labocine.com/stills/" + _id + ".jpg'/></a></div>";
 
-			if (i % 3 === 0){
-				if ( i === 0){
-					_new_div = "<div class='row'>" + _temp_div;
-				}
-				else if ( i == data.number_of_results - 1){
-					_new_div += _temp_div + "</div>";
-				}
-				else{
-					_new_div = _new_div + "</div><div class='row'>" + _temp_div;
-				}	
+		if (i % 3 === 0){
+			if ( i === 0){
+				_new_div = "<div class='row'>" + _temp_div;
+			}
+			else if ( i == data.number_of_results - 1){
+				_new_div += _temp_div + "</div>";
 			}
 			else{
-				_new_div += _temp_div;
-			}
+				_new_div = _new_div + "</div><div class='row'>" + _temp_div;
+			}	
 		}
-		_search_results.html(_new_div);
-
+		else{
+			_new_div += _temp_div;
+		}
 	}
+	_search_results.html(_new_div);
+
+
 }
 
 function convert_to_secs(time){
 	time = time.split(',');
 	var hms = time[0].split(':');
-	return parseFloat(String(Date.UTC(1970, 0, 1, hms[0], hms[1], hms[2]) / 1000) + '.' + time[1]);
+	return parseFloat(String(Date.UTC(1970, 0, 1, hms[0], hms[1], hms[2]) / 1000));
 
 }
 
-function start_stop_times(i,j,snippets){
-	video_items[i].cue(convert_to_secs(snippets[j]['end_time'])+1, function(){
+function start_stop_times(popcorn_element,j,snippets){
+	
+	var _end = convert_to_secs(snippets[j]['end_time']);
+
+	
+	popcorn_element.cue(_end, function(){
 		if ( j == snippets.length - 1){
-			video_items[i].pause();
+			popcorn_element.pause();
 		}
 		else{
-			video_items[i].currentTime(convert_to_secs(snippets[j+1]['start_time']));
+			var _start = convert_to_secs(snippets[j+1]['start_time'])
+			if (_start == _end){
+				_start += 1;
+			}
+
+			
+			popcorn_element.currentTime(_start);
 		}
 	})
 }
 
-function cue_video(i, snippets){
-	video_items[i].cue(0, function(){
-		video_items[i].currentTime(convert_to_secs(snippets[0]['start_time']));
+function cue_video(popcorn_element, snippets){
+	popcorn_element.cue(0, function(){
+		popcorn_element.currentTime(convert_to_secs(snippets[0]['start_time']));
 	});
 	for (var j = 0; j < snippets.length; j++){
-		start_stop_times(i,j,snippets);
+		start_stop_times(popcorn_element,j,snippets);
 	}
 }
 
@@ -66,7 +74,7 @@ function setup_video(i, snippets){
 	$('#_' + String(i)).parent().parent().mouseenter(function(){
 		$(this).find('img').hide();
 		$(this).find('video').show();
-		cue_video(i, snippets);
+		cue_video(video_items[i], snippets);
 		video_items[i].play();
 		
 	});
@@ -82,6 +90,22 @@ function instantiate_video_popcorn(n){
 	for (var i = 0; i < n ; i++){
 		video_items.push(Popcorn("#_" + String(i)));	
 	}
+}
+
+function populate_modal_window(data, query_term, n){
+	$('.modal-title').html("Blast result for '" + query_term + "'");
+	
+	// set up first video and queue others
+	montage = Popcorn('#montage');
+	_montage_player = $('#montage');
+
+	_montage_player.attr("src", data.results[0]['url']);
+	for (var j = 0 ; j < data.results[0]['snippets'].length; j++){
+		cue_video(montage, data.results[0]['snippets']);
+	}
+
+
+	$('#myModal').modal('show');
 }
 
 function search_term(query_term){
@@ -101,14 +125,22 @@ function search_term(query_term){
 			console.log('error');
 		},
 		success: function(data){
-			$.when(populate_grid(data, _search_results)).done(function(){
-				$.when(instantiate_video_popcorn(data.number_of_results)).done(function(){
-					for (var i = 0; i < data.number_of_results; i++){
-						setup_video(i, data.results[i]['snippets']);
-					}
-				});
-
-			});
+			if (data.number_of_results > 0){
+				$.when(populate_grid(data, _search_results)).done(function(){
+					$.when(instantiate_video_popcorn(data.number_of_results)).done(function(){
+						for (var i = 0; i < data.number_of_results; i++){
+							setup_video(i, data.results[i]['snippets']);
+						}
+						$.when(populate_modal_window(data, query_term, data.number_of_results)).done(function(){
+							// montage.play();
+						})
+					});
+				});	
+			}
+			else{
+				$('.search-results').html('No Results Found');
+			}
+			
 		}
 	});
 
