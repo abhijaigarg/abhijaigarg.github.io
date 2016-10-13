@@ -106,7 +106,7 @@ function get_sequence(data){
 }
 
 function populate_modal_window(data, query_term, n){
-	$('.modal-title').html("Blast result for '" + query_term + "'");
+	$('.modal-title').html("Blast result for '" + query_term + "' - " + n + ' videos in this montage');
 	
 	// // set up first video and queue others
 	var sequence = get_sequence(data);

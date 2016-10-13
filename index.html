@@ -87,7 +87,12 @@
         if (query_term !== undefined && query_term !== ''){
           search_term(query_term, 'montage');
         }
+        
         $('.modal-footer button').click(function(){
+          window.location.href = 'grid.html?search-term=' + query_term; 
+        });
+
+        $('.modal-header button').click(function(){
           window.location.href = 'grid.html?search-term=' + query_term; 
         });
       });
