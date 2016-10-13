@@ -102,28 +102,26 @@ function get_sequence(data){
 			sequence.push(_cue);
 		}
 	} 
-	console.log(sequence);
 	return sequence;
 }
 
 function populate_modal_window(data, query_term, n){
 	$('.modal-title').html("Blast result for '" + query_term + "'");
 	
-	// set up first video and queue others
+	// // set up first video and queue others
 	var sequence = get_sequence(data);
 
 	montage = Popcorn.sequence('montage', sequence);
-	montage.play();
-
 
 	$('#myModal').modal('show');
+
 }
 
-function search_term(query_term){
+function search_term(query_term, play_type){
 	var url = "https://labocine-video.herokuapp.com/api/video-keyword-search/v1/"
 	var query_URL = url + query_term;
 	var _search_results = $('.search-results');
-
+	
 	$('#search-box input').val(query_term);
 
 	_search_results.empty();
@@ -133,27 +131,34 @@ function search_term(query_term){
 		dataType: 'json',
 		async: false,
 		error: function(data){
-			console.log('error');
+			$('.search-results').html('Something went wrong');
 		},
 		success: function(data){
 			if (data.number_of_results > 0){
-				$.when(populate_grid(data, _search_results)).done(function(){
-					$.when(instantiate_video_popcorn(data.number_of_results)).done(function(){
-						for (var i = 0; i < data.number_of_results; i++){
-							setup_video(i, data.results[i]['snippets']);
-						}
-						$.when(populate_modal_window(data, query_term, data.number_of_results)).done(function(){
-							// montage.play();
-						})
+				if (play_type == 'montage'){
+					$.when(populate_modal_window(data, query_term, data.number_of_results)).done(function(){
+						montage.play();
 					});
-				});	
+				}
+				else if (play_type == 'grid'){
+					$.when(populate_grid(data, _search_results)).done(function(){
+						$.when(instantiate_video_popcorn(data.number_of_results)).done(function(){
+							for (var i = 0; i < data.number_of_results; i++){
+								setup_video(i, data.results[i]['snippets']);
+							}
+							
+						});
+					});	
+				}
 			}
 			else{
+
 				$('.search-results').html('No Results Found');
 			}
-			
+
 		}
 	});
+
 
 }
 
@@ -174,10 +179,19 @@ var getURLParameter = function getUrlParameter(sParam) {
 
 $(document).ready(function(){
 	var query_term = getURLParameter('search-term');
-
+	var data;
 	if (query_term !== undefined && query_term !== ''){
-		search_term(query_term);
+		search_term(query_term, 'montage');
 	}
 
+	$('.modal-footer button').click(function(){
+		$('#montage').empty();
+		montage = null;
+		search_term(query_term, 'grid');
+	});
+	// $('.modal-header button').click(function(){
+	// 	$('#montage').empty();
+	// 	search_term(query_term, 'grid');
+	// });
 });
 	
