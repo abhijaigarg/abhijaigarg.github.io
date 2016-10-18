@@ -11,7 +11,7 @@ function populate_grid(data, _search_results){
 		var _id = data.results[i]['id'];
 		var _temp_div = '';
 					
-		_temp_div = "<div class='tile'><a href='http://labocine.com/film/" + _id + "'><div class='title'></div><video id='_" + String(i) + "' preload='none'><source src='" + data.results[i]['url'] + "'></source></video><img src='http://labocine.com/stills/" + _id + ".jpg'/></a></div>";
+		_temp_div = "<div class='tile'><a href='http://labocine.com/film/" + _id + "'><div class='title'>" + data.results[i]['title'] +"</div><video id='_" + String(i) + "' preload='none'><source src='" + data.results[i]['url'] + "'></source></video><img src='http://labocine.com/stills/" + _id + ".jpg'/></a></div>";
 
 		if (i % 3 === 0){
 			if ( i === 0){
