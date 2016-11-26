@@ -1,6 +1,7 @@
 # Video Player for Blast!
 
-Blast allows you to search for exact time stamps where words or phrases are spoken in a video and create interesting user experiences with the data. You can query the database using our api endpoint ```labocine-video.herokuapp.com/api/video-keyword-search/v1/<query-term>```
+Blast allows you to search for exact time stamps where words or phrases are spoken in a video and create interesting user experiences with the data. You can query the database using our api endpoint
+ ```http://labocine-video.herokuapp.com/api/video-keyword-search/v1/<query-term>```
 
 To get the exact data, replace <query-term> with the actual term you are looking for.
 
