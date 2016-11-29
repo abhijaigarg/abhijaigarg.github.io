@@ -1,7 +1,17 @@
+*,html, body{
+	font-family: 'Rubik', Helvetica, sans-serif !important;
+}
+
 html, body{
 	background:#000;
 	border:0px;
 	margin:0px;
+	font-weight: 400 !important;
+}
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-weight: 700 !important;
 }
 
 
@@ -99,6 +109,29 @@ html, body{
 	width: 90%;
 	margin-left:auto;
 	margin-right: auto;
+}
+
+.instructions{
+	width: 70%;
+	margin-top: 50px;
+	font-weight: 100;
+	text-align: center;
+	font-size: 24px;
+	color:#fff;
+}
+
+.instructions ol{
+	text-align: left;
+	font-size: 20px;
+}
+
+.instructions ol li{
+	margin-top:30px;
+}
+
+.instructions ol li underscored{
+	border-bottom: dashed thin;
+
 }
 
 .tile{
