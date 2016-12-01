@@ -36,20 +36,35 @@
 
     <div class="container-full">
 
+      <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+        
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                
+                <div id="montage"></div>
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">View Results</button>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+
+
       <div class="navbar">
         <div class="logo">
           <a href="index.html"><img src="images/logo.png"></a>
         </div>
         <div class="search-bar"><form id="search-box" action="grid.html"><input type="text" name="search-term" placeholder="Search Videos"><form></div>
-      </div>
-
-   		<div class="search-results instructions">Based on the popular tool BLAST to find regions of similarity between biological sequences, Labocine Blast! finds similarities between films in the Archive and creates a montage of clips based on the occurence of a specific entry/word.
-      <br/><br/>
-      <ol>
-      <li>Search for a <underscored>keyword</underscored> in the search bar.</li>
-      <li>Popup window? That's the <underscored>Montage</underscored>! Blast creates a compilation of videos on the fly consisting of all snippets across all our videos containing the search query. Sit and enjoy a cool generative video experience.</li>
-      <li>Grid? <underscored>Scroll</underscored> over the grid tile and preview the video snippets where your search term occurs. It may take some time depending on your internet speed so bear with blast! :-) </li>
-      </ol>
       </div>
 
       <div class="footer">&copy; Labocine Blast. A <a href="http://labocine.com">Labocine</a> Labs project.</div>
@@ -66,5 +81,21 @@
     <script src="js/popcorn-complete.js"></script>
     <!-- <script src="js/popcorn-1.5.11/popcorn.js"></script> -->
     <script src="script.js"></script>
+    <script>
+      $(document).ready(function(){
+        var query_term = getURLParameter('search-term');
+        if (query_term !== undefined && query_term !== ''){
+          search_term(query_term, 'montage');
+        }
+        
+        $('.modal-footer button').click(function(){
+          window.location.href = 'grid.html?search-term=' + query_term; 
+        });
+
+        $('.modal-header button').click(function(){
+          window.location.href = 'grid.html?search-term=' + query_term; 
+        });
+      });
+    </script>
   </body>
 </html>
