@@ -1,0 +1,490 @@
+<!-- START SIGMA IMPORTS -->
+<script src="src/sigma.core.js"></script>
+<script src="src/conrad.js"></script>
+<script src="src/utils/sigma.utils.js"></script>
+<script src="src/utils/sigma.polyfills.js"></script>
+<script src="src/sigma.settings.js"></script>
+<script src="src/classes/sigma.classes.dispatcher.js"></script>
+<script src="src/classes/sigma.classes.configurable.js"></script>
+<script src="src/classes/sigma.classes.graph.js"></script>
+<script src="src/classes/sigma.classes.camera.js"></script>
+<script src="src/classes/sigma.classes.quad.js"></script>
+<script src="src/classes/sigma.classes.edgequad.js"></script>
+<script src="src/captors/sigma.captors.mouse.js"></script>
+<script src="src/captors/sigma.captors.touch.js"></script>
+<script src="src/renderers/sigma.renderers.canvas.js"></script>
+<script src="src/renderers/sigma.renderers.webgl.js"></script>
+<script src="src/renderers/sigma.renderers.svg.js"></script>
+<script src="src/renderers/sigma.renderers.def.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.nodes.def.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.nodes.fast.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.edges.def.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.edges.fast.js"></script>
+<script src="src/renderers/webgl/sigma.webgl.edges.arrow.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.labels.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.hovers.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.nodes.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edges.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edges.curve.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edges.arrow.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edges.curvedArrow.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edgehovers.def.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edgehovers.curve.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edgehovers.arrow.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.edgehovers.curvedArrow.js"></script>
+<script src="src/renderers/canvas/sigma.canvas.extremities.def.js"></script>
+<script src="src/renderers/svg/sigma.svg.utils.js"></script>
+<script src="src/renderers/svg/sigma.svg.nodes.def.js"></script>
+<script src="src/renderers/svg/sigma.svg.edges.def.js"></script>
+<script src="src/renderers/svg/sigma.svg.edges.curve.js"></script>
+<script src="src/renderers/svg/sigma.svg.labels.def.js"></script>
+<script src="src/renderers/svg/sigma.svg.hovers.def.js"></script>
+<script src="src/middlewares/sigma.middlewares.rescale.js"></script>
+<script src="src/middlewares/sigma.middlewares.copy.js"></script>
+<script src="src/misc/sigma.misc.animation.js"></script>
+<script src="src/misc/sigma.misc.bindEvents.js"></script>
+<script src="src/misc/sigma.misc.bindDOMEvents.js"></script>
+<script src="src/misc/sigma.misc.drawHovers.js"></script>
+<!-- END SIGMA IMPORTS -->
+<script src="plugins/sigma.plugins.neighborhoods/sigma.plugins.neighborhoods.js"></script>
+<script src="plugins/sigma.layout.forceAtlas2/supervisor.js"></script>
+<script src="plugins/sigma.layout.forceAtlas2/worker.js"></script>
+<script src="plugins/sigma.layout.noverlap/sigma.layout.noverlap.js"></script>
+<script src="lib/jquery-2.1.1.min.js"></script>
+<div id="container">
+  <style>
+    #graph-container {
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      position: absolute;
+      background-color: #ffffff;
+    }
+  </style>
+  <div id="graph-container"></div>
+</div>
+<script>
+/* 
+ * Json formatted text with all the data
+ *
+ */
+
+var data = '{\
+  "issue-title": "Brain Waves",\
+  "films" : \
+    [\
+      {\
+        "id": 205,\
+        "title": "Return to the Sea",\
+        "tags": "neuroscience, brain, lab, MRI, coma, music"\
+      },\
+      {\
+        "id": 921,\
+        "title": "Reconsolidation",\
+        "tags": "neuroscience, lab, experiment, fear, memory, reconsolidation, emotion, history, amygdala, holocaust, rat, rodent"\
+      },\
+      {\
+        "id": 973,\
+        "title": "The Mirror System",\
+        "tags": "neuron, mirror neuron, empathy, neuroscience, film, dream, tree, VR, MRI, lab, experiment, vision, eye"\
+      },\
+      {\
+        "id": 713,\
+        "title": "Blame It on the Seagull",\
+        "tags": "OCD, Tourette\'s Syndrome, psychiatry, neuroscience, bird"\
+      },\
+      {\
+        "id": 397,\
+        "title": "The Sierra Project",\
+        "tags": "sci-fi, brain, lab, experiment, computer, digital, simulation, neural network"\
+      },\
+      {\
+        "id": 1042,\
+        "title": "Centrifuge Brain Project",\
+        "tags": "sci-fi, experiment, brain, kinetic"\
+      },\
+      {\
+        "id": 979,\
+        "title": "Out of Our Minds",\
+        "tags": "neuroscience, consciousness, cognition, neuron, animal behavior, rat, rodent, bird, behaviorism"\
+      },\
+      {\
+        "id": 916,\
+        "title": "Optogenetics: Lights Gets on Your Nerves",\
+        "tags": "optigenetics, light, neuron, nerve, gene, genetics, rhodopsin, lab, experiment, cell signaling, membrane, mouse, water maze, planaria"\
+      },\
+      {\
+        "id": 1025,\
+        "title": "Smart Pattern",\
+        "tags": "brain, neuroscience, MRI, lab, visualization, computer, music"\
+      },\
+      {\
+        "id": 868,\
+        "title": "Butterflies of the Soul",\
+        "tags": "history, neuroscience, Santiago Ramón y Cajal, photography, lab, microscope, neuron, synapse, hypnosis, dendrite, neuroplasticity, vision, eye, memory"\
+      },\
+      {\
+        "id": 890,\
+        "title": "Expert Dreamers",\
+        "tags": "dream, sleep, lab, meditation, neuroscience, experiment"\
+      },\
+      {\
+        "id": 90,\
+        "title": "Escape from Planet Tar",\
+        "tags": "sci-fi, brain, language, extraterrestial, mouse, psychiatry, unconciousness, Karl Jung, experiment, rodent"\
+      },\
+      {\
+        "id": 1034,\
+        "title": "Visualizing Crossing Fibers",\
+        "tags": "brain, neuroscience, data, visualization, MRI, lab, anatomy, simulation"\
+      },\
+      {\
+        "id": 455,\
+        "title": "Slow Wave",\
+        "tags": "sleep, dream, hallucination"\
+      },\
+      {\
+        "id": 1056,\
+        "title": "The Land Within",\
+        "tags": "brain, neuroscience, neuron, cognition, memory, consciousness, neurotransmitter, synapse, tree, soul"\
+      }\
+    ]\
+}';
+var json = JSON.parse(data);
+
+
+ /* JSON formatted text ends */
+
+
+
+
+sigma.utils.pkg('sigma.canvas.nodes');
+sigma.canvas.nodes.image = (function() {
+  var _cache = {},
+      _loading = {},
+      _callbacks = {};
+
+  // Return the renderer itself:
+  var renderer = function(node, context, settings) {
+    var args = arguments,
+        prefix = settings('prefix') || '',
+        size = node[prefix + 'size'],
+        color = node.color || settings('defaultNodeColor'),
+        url = node.url;
+
+    if (_cache[url]) {
+      context.save();
+
+      // Draw the clipping disc:
+      context.beginPath();
+      context.arc(
+        node[prefix + 'x'],
+        node[prefix + 'y'],
+        node[prefix + 'size'],
+        0,
+        Math.PI * 2,
+        true
+      );
+      context.closePath();
+      context.clip();
+
+      // Draw the image
+      context.drawImage(
+        _cache[url],
+        node[prefix + 'x'] - size,
+        node[prefix + 'y'] - size,
+        2 * size,
+        2 * size
+      );
+
+      // Quit the "clipping mode":
+      context.restore();
+
+      // Draw the border:
+      context.beginPath();
+      context.arc(
+        node[prefix + 'x'],
+        node[prefix + 'y'],
+        node[prefix + 'size'],
+        0,
+        Math.PI * 2,
+        true
+      );
+      context.lineWidth = size / 5;
+      context.strokeStyle = node.color || settings('defaultNodeColor');
+      context.stroke();
+    } else {
+      sigma.canvas.nodes.image.cache(url);
+      sigma.canvas.nodes.def.apply(
+        sigma.canvas.nodes,
+        args
+      );
+    }
+  };
+
+  // Let's add a public method to cache images, to make it possible to
+  // preload images before the initial rendering:
+  renderer.cache = function(url, callback) {
+    if (callback)
+      _callbacks[url] = callback;
+
+    if (_loading[url])
+      return;
+
+    var img = new Image();
+
+    img.onload = function() {
+      _loading[url] = false;
+      _cache[url] = img;
+
+      if (_callbacks[url]) {
+        _callbacks[url].call(this, img);
+        delete _callbacks[url];
+      }
+    };
+
+    _loading[url] = true;
+    img.src = url;
+  };
+
+  return renderer;
+})();
+
+// get thumbnail url list
+function getThumbnailURLs(films){
+  var urls = [];
+  for ( var i = 0; i < films.length; i++){
+    urls.push('http://labocine.com/stills/' + films[i].id + '.jpg');
+  }
+  return urls;
+}
+
+
+// to create list of distinct tags
+$.extend({
+    distinct : function(anArray) {
+       var result = [];
+       $.each(anArray, function(i,v){
+           if ($.inArray(v, result) == -1) result.push(v);
+       });
+       return result;
+    }
+});
+
+// create tags as vectors
+function createTagVector(films){
+  var tags = [];
+  for (var i = 0; i < films.length; i++){
+    // split tags per film into individual token
+    var film_tags = films[i].tags.split(',');   
+
+    // add all tags to vector 
+    for (var j = 0; j < film_tags.length; j++){
+      tags.push(film_tags[j].trim());
+    }
+  }
+
+  tags = $.distinct(tags);
+  return tags;
+}
+
+
+
+var i, j,
+    s,
+    films = json.films,
+    width = $('.graph-container').width(),
+    height = $('.graph-container').height(),
+    g = {
+      nodes: [],
+      edges: []
+    },
+    loaded = 0,
+    urls = getThumbnailURLs(films);
+
+// create tag vector and update film obj
+var tags = createTagVector(films);
+
+var F = films.length, //number of films
+    T = tags.length; // number of tags
+
+
+
+// insert title in the center
+g.nodes.push({
+    id: 'title',
+    label: json['issue-title'] ,
+    x: .5,
+    y: .5,
+    type: 'title',
+    size: 1.5,
+    color: 'rgba(36,67,35,1)'
+  });
+
+// spread out film nodes based on balancing algorithm
+for (i = 0; i < F; i++){
+
+  var _x = 0.5 + (0.4) * Math.cos(2 * Math.PI * i / F);
+  var _y = 0.5 + (0.4) * Math.sin(2 * Math.PI * i / F);
+  g.nodes.push({
+      id: 'f' + i,
+      label: films[i].title ,
+      x: _x,
+      y: _y,
+      url: urls[i],
+      type: 'image',
+      size: 2.5,
+      color: 'rgba(102,102,102,.1)'
+  });
+}
+
+// spread out tags randomly
+for (i = 0; i < T; i++){
+  g.nodes.push({
+      id: 't' + i,
+      label: tags[i],
+      x: Math.random(),
+      y: Math.random(),
+      size: 0.1,
+      color: 'rgba(153, 153, 153, .1)'
+  });
+}
+
+// create edges from title to films
+for (i=0; i < F; i++){
+  g.edges.push({
+    id: 'ef' + i,
+    source: 'title',
+    target: 'f' + i,
+    size: Math.random(),
+    color: 'rgba(102, 102, 102, .1)'
+  });
+}
+
+
+var et_ID = 0;
+
+// create edges for each tag and each film
+for (i = 0; i < F; i++){
+  var tag = [];
+  for(j = 0; j < T; j++){
+    if ((films[i].tags).indexOf(tags[j]) > -1){
+      g.edges.push({
+        id: 'et' + et_ID,
+        source: 'f' + i,
+        target: 't' + j,
+        size: Math.random(),
+        color: 'rgba(102, 102, 102, .1)'
+      });   
+      et_ID++;
+    }
+  }
+}
+
+
+// Then, wait for all images to be loaded before instanciating sigma:
+function loadImages(){
+  urls.forEach(function(url) {
+    sigma.canvas.nodes.image.cache(url);
+  });
+}
+
+$.when(loadImages()).then(function(){
+  // Instantiate sigma:
+  s = new sigma({
+    graph: g,
+    renderer: {
+      // IMPORTANT:
+      // This works only with the canvas renderer, so the
+      // renderer type set as "canvas" is necessary here.
+      container: document.getElementById('graph-container'),
+      type: 'canvas'
+    },
+    settings: {
+      minNodeSize: 3,
+      maxNodeSize: 12,
+      doubleClickEnabled: false
+    }
+  });
+
+  s.bind('clickNode',function(event){
+    var targetNode = event.data.node;
+    var nodeId = targetNode.id;
+
+    // mute all nodes
+    $(s.graph.nodes()).each(function(){
+      mute(this);
+    });
+
+    // mute all edges
+    $(s.graph.edges()).each(function(){
+      mute(this);
+    });
+
+    // unmute target node
+    unmute(targetNode);
+
+    // get neighbours
+    var neighbours = s.graph.neighborhood(nodeId);
+    
+    // unmute neghbourhood nodes
+    $(neighbours.nodes).each(function(){
+      unmute(this);
+    });
+
+    // unmute neighbourhood edges
+    $(neighbours.edges).each(function(){
+      unmute(this);
+    });
+    
+  });
+
+  s.bind('doubleClickNode',function(event){
+
+    var targetNode = event.data.node;
+
+    // check if node is of type image
+    if (targetNode.type === 'image'){
+
+      var url = getFilmURL(targetNode);
+      window.location = url;
+    }
+  });
+});
+
+// get redirect link from node
+function getFilmURL(node){
+  var url = node.url;
+  url = url.replace('.jpg', '');
+  url = url.replace('http://labocine.com/stills/', '');
+  url = 'http://labocine.com/film/' + url;
+  return url;
+}
+
+// Hex to RGB conversion helper functions
+function hexToR(h) {return parseInt((cutHex(h)).substring(0,2),16)}
+function hexToG(h) {return parseInt((cutHex(h)).substring(2,4),16)}
+function hexToB(h) {return parseInt((cutHex(h)).substring(4,6),16)}
+function cutHex(h) {return (h.charAt(0)=="#") ? h.substring(1,7):h}
+
+// get RGB values
+function getRGB(rgb){ 
+  rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+    return [rgb[1],rgb[2],rgb[3]];
+}
+
+// Binding silly interactions
+function mute(node) {
+  rgb = getRGB(node.color);
+  node.color = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ', .1)';
+  s.refresh();
+}
+
+function unmute(node) {
+  rgb = getRGB(node.color);
+  node.color = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ', 1)';
+  s.refresh();
+}
+
+</script>
