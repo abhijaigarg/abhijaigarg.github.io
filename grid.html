@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Blast! Labocine</title>
+    <title>Blast! Labocine Search Results</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -35,35 +35,13 @@
 
     <div class="container-full">
 
-      <div class="modal fade" id="myModal" role="dialog">
-        <div class="modal-dialog">
-        
-          <!-- Modal content-->
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title"></h4>
-            </div>
-            <div class="modal-body">
-                
-                <div id="montage"></div>
-              
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">View Results</button>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-
-
-
       <div class="navbar">
         <div class="logo">
           <a href="index.html"><img src="images/logo.png"></a>
         </div>
-        <div class="search-bar"><form id="search-box" action="index.html"><input type="text" name="search-term" placeholder="Search Videos"><form></div>
+        <div class="search-bar"><form id="search-box" action="grid.html"><input type="text" name="search-term" placeholder="Search Videos"><form></div>
+
+        <a href="#" class="btn btn-montage" role="button" data-toggle="tooltip" data-placement="bottom" title="Tooltip on left">Montage <img src="images/external-link.png"/></a>
       </div>
 
    		<div class="search-results"></div>
@@ -84,10 +62,16 @@
     <script src="script.js"></script>
     <script>
       $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip(); 
         var query_term = getURLParameter('search-term');
+
         if (query_term !== undefined && query_term !== ''){
           search_term(query_term, 'grid');
         }
+
+        $('.btn-montage').click(function(){
+          window.open('montage.html?search-term='+query_term);
+        })
       });
     </script>
   </body>

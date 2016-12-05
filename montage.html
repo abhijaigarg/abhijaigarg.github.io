@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Blast! Labocine</title>
+    <title>Blast! Labocine Montage</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -51,7 +51,7 @@
               
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">View Results</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Back to Grid</button>
             </div>
           </div>
           
@@ -66,6 +66,10 @@
         </div>
         <div class="search-bar"><form id="search-box" action="grid.html"><input type="text" name="search-term" placeholder="Search Videos"><form></div>
       </div>
+
+      <div class="search-results instructions>Here</div>
+
+
 
       <div class="footer">&copy; Labocine Blast. A <a href="http://labocine.com">Labocine</a> Labs project.</div>
     </div>
@@ -83,7 +87,12 @@
     <script src="script.js"></script>
     <script>
       $(document).ready(function(){
+
         var query_term = getURLParameter('search-term');
+
+        // add loading screen
+        // $('.instructions').html('here');
+
         if (query_term !== undefined && query_term !== ''){
           search_term(query_term, 'montage');
         }
@@ -95,6 +104,10 @@
         $('.modal-header button').click(function(){
           window.location.href = 'grid.html?search-term=' + query_term; 
         });
+
+        $('#myModal').on('hidden.bs.modal', function(){
+          window.location.href = 'grid.html?search-term=' + query_term; 
+        })
       });
     </script>
   </body>

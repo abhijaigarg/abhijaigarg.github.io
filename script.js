@@ -79,8 +79,6 @@ function populate_modal_window(data, query_term, n){
 
 	montage = Popcorn.sequence('montage', sequence);
 
-	$('#myModal').modal('show');
-
 }
 
 /*
@@ -189,8 +187,6 @@ function search_term(query_term, play_type){
 	// ensure that on results page the input box still shows the query term
 	$('#search-box input').val(query_term);
 
-	
-
 
 	$.ajax({
 		url: query_URL,
@@ -201,20 +197,11 @@ function search_term(query_term, play_type){
 			$('.search-results').html('Something went wrong');
 		},
 		success: function(data){
+			var _loaded = 0;
 			if (data.number_of_results > 0){
 
-				// if play_type == "montage", populate results on the modal window
-				if (play_type == 'montage'){
-
-					// wait for populate_modal_window to end before play is triggered
-					$.when(populate_modal_window(data, query_term, data.number_of_results)).done(function(){
-
-						montage.play();
-					});
-				}
-
 				// for play_type == "grid", populate results as a list
-				else if (play_type == 'grid'){
+				if (play_type == 'grid'){
 					$.when(populate_grid(data, _search_results)).done(function(){
 						$.when(instantiate_video_popcorn(data.number_of_results)).done(function(){
 							for (var i = 0; i < data.number_of_results; i++){
@@ -223,6 +210,25 @@ function search_term(query_term, play_type){
 							
 						});
 					});	
+				}
+
+				// if play_type == "montage", populate results on the modal window
+				else if (play_type == 'montage'){
+					// wait for populate_modal_window to end before play is triggered
+
+					console.log('num of results: ' + data.number_of_results);
+
+					$.when(populate_modal_window(data, query_term, data.number_of_results)).done(function(){
+						console.log('wassup');
+						var v = document.getElementById('montage');
+						
+						v.addEventListener('loadeddata',function(e){
+
+							$('#myModal').modal('show');
+							montage.play();
+						}, true);
+						
+					});
 				}
 			}
 
