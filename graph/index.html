@@ -318,7 +318,9 @@ g.nodes.push({
     x: .5,
     y: .5,
     type: 'title',
-    size: 1.5,
+    size: 2,
+    type:'image',
+    url: 'http://labocine.com/assets/img/cover/november.jpg',
     color: 'rgba(36,67,35,1)'
   });
 
@@ -408,6 +410,26 @@ $.when(loadImages()).then(function(){
     }
   });
 
+  s.bind('overNode', function(event){
+
+    var nodeId = event.data.node.id;
+
+    if (nodeId === 'title'){
+      console.log('click to see films in this issue / double click to find out more');
+    }
+
+    else if (nodeId[0] === 't'){
+      console.log('this is a tag');
+    }
+
+    else if (nodeId[0] === 'f'){
+      console.log('this is a film');
+    }
+
+    // if (event.data.node.id === '')
+    // console.log(event.data.node.id);
+  });
+
   s.bind('clickNode',function(event){
     var targetNode = event.data.node;
     var nodeId = targetNode.id;
@@ -461,12 +483,6 @@ function getFilmURL(node){
   url = 'http://labocine.com/film/' + url;
   return url;
 }
-
-// Hex to RGB conversion helper functions
-function hexToR(h) {return parseInt((cutHex(h)).substring(0,2),16)}
-function hexToG(h) {return parseInt((cutHex(h)).substring(2,4),16)}
-function hexToB(h) {return parseInt((cutHex(h)).substring(4,6),16)}
-function cutHex(h) {return (h.charAt(0)=="#") ? h.substring(1,7):h}
 
 // get RGB values
 function getRGB(rgb){ 

@@ -220,13 +220,14 @@ function search_term(query_term, play_type){
 
 					$.when(populate_modal_window(data, query_term, data.number_of_results)).done(function(){
 						console.log('wassup');
-						var v = document.getElementById('montage');
-						
-						v.addEventListener('loadeddata',function(e){
+						$('#myModal').modal('show');
+						montage.play();
+							// var v = document.getElementById('montage');
+							
+							// v.addEventListener('loadeddata',function(e){
 
-							$('#myModal').modal('show');
-							montage.play();
-						}, true);
+								
+							// }, true);
 						
 					});
 				}

@@ -66,5 +66,15 @@
     <script src="js/popcorn-complete.js"></script>
     <!-- <script src="js/popcorn-1.5.11/popcorn.js"></script> -->
     <script src="script.js"></script>
+    <script>
+      $('#search-box').submit(function(event){
+        event.preventDefault();
+        var form = this;
+        $('.instructions').html('<img src="images/labocine-loading.gif" height="140px"/><br/><br/>Let Blast do its magic. Give us a few seconds.');
+        setTimeout(function(){
+          form.submit();
+        },5000)
+      });
+    </script>
   </body>
 </html>

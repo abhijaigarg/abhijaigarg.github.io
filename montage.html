@@ -67,7 +67,7 @@
         <div class="search-bar"><form id="search-box" action="grid.html"><input type="text" name="search-term" placeholder="Search Videos"><form></div>
       </div>
 
-      <div class="search-results instructions>Here</div>
+      <div class="search-results instructions"><img src="images/labocine-montage-loading.gif" height="160px"/><br/><br/>Sit tight as we curate your montage!<br/><br/>The Montage creates a generative video experience. We scan through all our films and create a new combined video with all relevant snippets. There are a lot of films, so sit back and relax while we load the montage for you!</div>
 
 
 
@@ -86,28 +86,28 @@
     <!-- <script src="js/popcorn-1.5.11/popcorn.js"></script> -->
     <script src="script.js"></script>
     <script>
+
       $(document).ready(function(){
+        setTimeout(function(){
+          // $('instructions').html();
+          var query_term = getURLParameter('search-term');
 
-        var query_term = getURLParameter('search-term');
+          if (query_term !== undefined && query_term !== ''){
+            search_term(query_term, 'montage');
+          }
+          
+          $('.modal-footer button').click(function(){
+            window.location.href = 'grid.html?search-term=' + query_term; 
+          });
 
-        // add loading screen
-        // $('.instructions').html('here');
+          $('.modal-header button').click(function(){
+            window.location.href = 'grid.html?search-term=' + query_term; 
+          });
 
-        if (query_term !== undefined && query_term !== ''){
-          search_term(query_term, 'montage');
-        }
-        
-        $('.modal-footer button').click(function(){
-          window.location.href = 'grid.html?search-term=' + query_term; 
-        });
-
-        $('.modal-header button').click(function(){
-          window.location.href = 'grid.html?search-term=' + query_term; 
-        });
-
-        $('#myModal').on('hidden.bs.modal', function(){
-          window.location.href = 'grid.html?search-term=' + query_term; 
-        })
+          $('#myModal').on('hidden.bs.modal', function(){
+            window.location.href = 'grid.html?search-term=' + query_term; 
+          });
+        },8000);
       });
     </script>
   </body>
