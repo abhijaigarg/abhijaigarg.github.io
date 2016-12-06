@@ -54,15 +54,20 @@
 <div id="container">
   <style>
     #graph-container {
-      top: 0;
+      top: 40;
       bottom: 0;
       left: 0;
       right: 0;
       position: absolute;
       background-color: #ffffff;
     }
+    .help-text{
+      color: #000000;
+      font-family: sans-serif;
+    }
   </style>
-  <div class="help-text">This is help text</div>
+  <div style="display:none" class="help-text"></div>
+  <div style="display:none" class="help-text-2"></div>
   <div id="graph-container"></div>
 </div>
 <script>
@@ -416,25 +421,31 @@ $.when(loadImages()).then(function(){
     }
   });
 
-  // s.bind('overNode', function(event){
+  s.bind('overNode', function(event){
 
-  //   var nodeId = event.data.node.id;
+    var nodeId = event.data.node.id;
+    var _message_div = $('.help-text');
+    $('.help-text-2').html();
+    if (nodeId === 'title'){
+      _message_div.html('Click node to see all films in this issue.')
+      _message_div.show();
+    }
 
-  //   if (nodeId === 'title'){
-  //     console.log('click to see films in this issue / double click to find out more');
-  //   }
+    else if (nodeId[0] === 't'){
+      _message_div.html('Click node to see all films related to this tag.')
+      _message_div.show();
+    }
 
-  //   else if (nodeId[0] === 't'){
-  //     console.log('this is a tag');
-  //   }
+    else if (nodeId[0] === 'f'){
+      _message_div.html('Click node to see all tags related to this film.')
+      _message_div.show();
+    }
 
-  //   else if (nodeId[0] === 'f'){
-  //     console.log('this is a film');
-  //   }
+  });
 
-  //   // if (event.data.node.id === '')
-  //   // console.log(event.data.node.id);
-  // });
+  s.bind('outNode', function(){
+    $('.help-text').hide();
+  })
 
   s.bind('clickNode',function(event){
     var targetNode = event.data.node;
@@ -465,6 +476,13 @@ $.when(loadImages()).then(function(){
     $(neighbours.edges).each(function(){
       unmute(this);
     });
+
+    if (nodeId[0] === 'f'){
+      var url = getFilmURL(targetNode);
+      var _message_div = $('.help-text-2');
+      _message_div.html('Click <a href="' + url + '">here</a> to go to film.');
+      _message_div.show();
+    }
     
   });
 
