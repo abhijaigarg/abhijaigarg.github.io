@@ -219,15 +219,9 @@ function search_term(query_term, play_type){
 					console.log('num of results: ' + data.number_of_results);
 
 					$.when(populate_modal_window(data, query_term, data.number_of_results)).done(function(){
-						console.log('wassup');
+						$('instructions').html();
 						$('#myModal').modal('show');
 						montage.play();
-							// var v = document.getElementById('montage');
-							
-							// v.addEventListener('loadeddata',function(e){
-
-								
-							// }, true);
 						
 					});
 				}

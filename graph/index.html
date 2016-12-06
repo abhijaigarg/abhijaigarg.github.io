@@ -410,27 +410,27 @@ $.when(loadImages()).then(function(){
     }
   });
 
-  s.bind('overNode', function(event){
+  // s.bind('overNode', function(event){
 
-    var nodeId = event.data.node.id;
+  //   var nodeId = event.data.node.id;
 
-    if (nodeId === 'title'){
-      console.log('click to see films in this issue / double click to find out more');
-    }
+  //   if (nodeId === 'title'){
+  //     console.log('click to see films in this issue / double click to find out more');
+  //   }
 
-    else if (nodeId[0] === 't'){
-      console.log('this is a tag');
-    }
+  //   else if (nodeId[0] === 't'){
+  //     console.log('this is a tag');
+  //   }
 
-    else if (nodeId[0] === 'f'){
-      console.log('this is a film');
-    }
+  //   else if (nodeId[0] === 'f'){
+  //     console.log('this is a film');
+  //   }
 
-    // if (event.data.node.id === '')
-    // console.log(event.data.node.id);
-  });
+  //   // if (event.data.node.id === '')
+  //   // console.log(event.data.node.id);
+  // });
 
-  s.bind('clickNode',function(event){
+  s.bind('overNode',function(event){
     var targetNode = event.data.node;
     var nodeId = targetNode.id;
 
@@ -462,7 +462,9 @@ $.when(loadImages()).then(function(){
     
   });
 
-  s.bind('doubleClickNode',function(event){
+  // s.bind('doubleClickNode',function(event){
+
+  s.bind('clickNode',function(event){
 
     var targetNode = event.data.node;
 
