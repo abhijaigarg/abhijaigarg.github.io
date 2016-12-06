@@ -62,6 +62,7 @@
       background-color: #ffffff;
     }
   </style>
+  <div class="help-text">This is help text</div>
   <div id="graph-container"></div>
 </div>
 <script>
@@ -148,6 +149,11 @@ var data = '{\
         "id": 1056,\
         "title": "The Land Within",\
         "tags": "brain, neuroscience, neuron, cognition, memory, consciousness, neurotransmitter, synapse, tree, soul"\
+      },\
+      {\
+        "id": 1085,\
+        "title": "Wide Awake",\
+        "tags": "sleep, insomnia, dream, brain, mind"\
       }\
     ]\
 }';
@@ -406,7 +412,7 @@ $.when(loadImages()).then(function(){
     settings: {
       minNodeSize: 3,
       maxNodeSize: 12,
-      doubleClickEnabled: true
+      // doubleClickEnabled: true
     }
   });
 
@@ -465,15 +471,15 @@ $.when(loadImages()).then(function(){
   s.bind('doubleClickNode',function(event){
 
   // s.bind('clickNode',function(event){
-
+    console.log('double');
     var targetNode = event.data.node;
 
     // check if node is of type image
-    if (targetNode.type === 'image'){
+    // if (targetNode.type === 'image'){
 
-      var url = getFilmURL(targetNode);
-      window.location = url;
-    }
+    //   var url = getFilmURL(targetNode);
+    //   window.location = url;
+    // }
   });
 });
 
