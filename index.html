@@ -44,7 +44,7 @@
       </div>
 
    		<div class="search-results instructions">Based on the popular tool BLAST to find regions of similarity between biological sequences, Labocine Blast! finds similarities between films in the Archive and creates a montage of clips based on the occurence of a specific entry/word.
-      <br/><br/>
+      <br/><img src="images/blast_720p.jpg" height="180px"/><br/>
       <ol>
       <li>Search for a <underscored>keyword</underscored> in the search bar.</li>
       <li>Popup window? That's the <underscored>Montage</underscored>! Blast creates a compilation of videos on the fly consisting of all snippets across all our videos containing the search query. Sit and enjoy a cool generative video experience.</li>
@@ -67,23 +67,16 @@
     <!-- <script src="js/popcorn-1.5.11/popcorn.js"></script> -->
     <script src="script.js"></script>
     <script>
-    var query_term = getURLParameter('search-term');
-    if (query_term !== 'undefined'){
+    
+    $('#search-box').submit(function(event){
+      event.preventDefault();
+      var form = this;
       $('.instructions').html('<img src="images/labocine-loading.gif" height="140px"/><br/><br/>Let Blast do its magic. Give us a few seconds.');
       setTimeout(function(){
-          window.location.replace("grid.html?search-term=" + query_term);
-        },5000);
-    }
-    else{
-      $('#search-box').submit(function(event){
-        event.preventDefault();
-        var form = this;
-        $('.instructions').html('<img src="images/labocine-loading.gif" height="140px"/><br/><br/>Let Blast do its magic. Give us a few seconds.');
-        setTimeout(function(){
-          form.submit();
-        },5000)
-      });
-    }
+        form.submit();
+      },300)
+    });
+    
     </script>
   </body>
 </html>

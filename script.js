@@ -115,7 +115,6 @@ function populate_grid(data, _search_results){
 	}
 	_search_results.html(_new_div);
 
-
 }
 
 /*
@@ -204,6 +203,8 @@ function search_term(query_term, play_type){
 				if (play_type == 'grid'){
 					$.when(populate_grid(data, _search_results)).done(function(){
 						$.when(instantiate_video_popcorn(data.number_of_results)).done(function(){
+							$('.instructions').html();
+							$('.search-results').removeClass('instructions');
 							for (var i = 0; i < data.number_of_results; i++){
 								setup_video(i, data.results[i]['snippets']);
 							}
@@ -216,10 +217,8 @@ function search_term(query_term, play_type){
 				else if (play_type == 'montage'){
 					// wait for populate_modal_window to end before play is triggered
 
-					console.log('num of results: ' + data.number_of_results);
-
 					$.when(populate_modal_window(data, query_term, data.number_of_results)).done(function(){
-						$('instructions').html();
+						$('.instructions').html();
 						$('#myModal').modal('show');
 						montage.play();
 						

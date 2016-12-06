@@ -148,16 +148,17 @@ h1,h2,h3,h4,h5,h6 {
 	width: 90%;
 	margin-left:auto;
 	margin-right: auto;
+	/*overflow-y:scroll;*/
 }
 
 .instructions{
-	/*background: #fff;*/
 	width: 70%;
-	margin-top: 80px;
+	margin-top: 60px;
 	font-weight: 100;
 	text-align: center;
 	font-size: 24px;
 	color:#fff;
+	margin-bottom: 25px;
 }
 
 .instructions ol{
