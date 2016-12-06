@@ -68,7 +68,7 @@
     <script src="script.js"></script>
     <script>
     var query_term = getURLParameter('search-term');
-    if (query_term !== ''){
+    if (query_term !== 'undefined'){
       $('.instructions').html('<img src="images/labocine-loading.gif" height="140px"/><br/><br/>Let Blast do its magic. Give us a few seconds.');
       setTimeout(function(){
           window.location.replace("grid.html?search-term=" + query_term);
