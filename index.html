@@ -67,6 +67,14 @@
     <!-- <script src="js/popcorn-1.5.11/popcorn.js"></script> -->
     <script src="script.js"></script>
     <script>
+    var query_term = getURLParameter('search-term');
+    if (query_term !== ''){
+      $('.instructions').html('<img src="images/labocine-loading.gif" height="140px"/><br/><br/>Let Blast do its magic. Give us a few seconds.');
+      setTimeout(function(){
+          window.location.replace("grid.html?search-term=" + query_term);
+        },5000);
+    }
+    else{
       $('#search-box').submit(function(event){
         event.preventDefault();
         var form = this;
@@ -75,6 +83,7 @@
           form.submit();
         },5000)
       });
+    }
     </script>
   </body>
 </html>
