@@ -451,6 +451,13 @@ $.when(loadImages()).then(function(){
     var targetNode = event.data.node;
     var nodeId = targetNode.id;
 
+    if (nodeId[0] === 'f'){
+      var url = getFilmURL(targetNode);
+      var _message_div = $('.help-text-2');
+      _message_div.html('Click <a href="' + url + '">here</a> to go to film.');
+      _message_div.show();
+    }
+
     // mute all nodes
     $(s.graph.nodes()).each(function(){
       mute(this);
@@ -476,28 +483,18 @@ $.when(loadImages()).then(function(){
     $(neighbours.edges).each(function(){
       unmute(this);
     });
-
-    if (nodeId[0] === 'f'){
-      var url = getFilmURL(targetNode);
-      var _message_div = $('.help-text-2');
-      _message_div.html('Click <a href="' + url + '">here</a> to go to film.');
-      _message_div.show();
-    }
     
   });
 
   s.bind('doubleClickNode',function(event){
 
-  // s.bind('clickNode',function(event){
-    console.log('double');
     var targetNode = event.data.node;
 
     // check if node is of type image
-    // if (targetNode.type === 'image'){
-
-    //   var url = getFilmURL(targetNode);
-    //   window.location = url;
-    // }
+    if (targetNode.id[0] === 'f'){
+      var url = getFilmURL(targetNode);
+      window.location = url;
+    }
   });
 });
 
