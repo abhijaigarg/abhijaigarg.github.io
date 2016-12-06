@@ -406,7 +406,7 @@ $.when(loadImages()).then(function(){
     settings: {
       minNodeSize: 3,
       maxNodeSize: 12,
-      doubleClickEnabled: false
+      doubleClickEnabled: true
     }
   });
 
@@ -430,7 +430,7 @@ $.when(loadImages()).then(function(){
   //   // console.log(event.data.node.id);
   // });
 
-  s.bind('overNode',function(event){
+  s.bind('clickNode',function(event){
     var targetNode = event.data.node;
     var nodeId = targetNode.id;
 
@@ -462,9 +462,9 @@ $.when(loadImages()).then(function(){
     
   });
 
-  // s.bind('doubleClickNode',function(event){
+  s.bind('doubleClickNode',function(event){
 
-  s.bind('clickNode',function(event){
+  // s.bind('clickNode',function(event){
 
     var targetNode = event.data.node;
 
