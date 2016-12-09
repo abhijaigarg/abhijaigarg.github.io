@@ -41,7 +41,9 @@ function cue_video(popcorn_element, snippets){
 	}
 }
 
-
+function shuffle(array){
+	return array.sort(function() { return 0.5 - Math.random() });
+}
 
 function get_sequence(data){
 	var sequence = new Array();
@@ -53,6 +55,7 @@ function get_sequence(data){
 			sequence.push(_cue);
 		}
 	} 
+	sequence = shuffle(sequence);
 	return sequence;
 }
 
