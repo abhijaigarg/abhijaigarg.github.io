@@ -165,111 +165,116 @@ var data = '{\
 var json = JSON.parse(data);
 
 
- /* JSON formatted text ends */
 
 
 
 
-sigma.utils.pkg('sigma.canvas.nodes');
-sigma.canvas.nodes.image = (function() {
-  var _cache = {},
-      _loading = {},
-      _callbacks = {};
 
-  // Return the renderer itself:
-  var renderer = function(node, context, settings) {
-    var args = arguments,
-        prefix = settings('prefix') || '',
-        size = node[prefix + 'size'],
-        color = node.color || settings('defaultNodeColor'),
-        url = node.url;
+//  /* JSON formatted text ends */
 
-    if (_cache[url]) {
-      context.save();
 
-      // Draw the clipping disc:
-      context.beginPath();
-      context.arc(
-        node[prefix + 'x'],
-        node[prefix + 'y'],
-        node[prefix + 'size'],
-        0,
-        Math.PI * 2,
-        true
-      );
-      context.closePath();
-      context.clip();
 
-      // Draw the image
-      context.drawImage(
-        _cache[url],
-        node[prefix + 'x'] - size,
-        node[prefix + 'y'] - size,
-        2 * size,
-        2 * size
-      );
 
-      // Quit the "clipping mode":
-      context.restore();
+// // sigma.utils.pkg('sigma.canvas.nodes');
+// // sigma.canvas.nodes.image = (function() {
+// //   var _cache = {},
+// //       _loading = {},
+// //       _callbacks = {};
 
-      // Draw the border:
-      context.beginPath();
-      context.arc(
-        node[prefix + 'x'],
-        node[prefix + 'y'],
-        node[prefix + 'size'],
-        0,
-        Math.PI * 2,
-        true
-      );
-      context.lineWidth = size / 5;
-      context.strokeStyle = node.color || settings('defaultNodeColor');
-      context.stroke();
-    } else {
-      sigma.canvas.nodes.image.cache(url);
-      sigma.canvas.nodes.def.apply(
-        sigma.canvas.nodes,
-        args
-      );
-    }
-  };
+// //   // Return the renderer itself:
+// //   var renderer = function(node, context, settings) {
+// //     var args = arguments,
+// //         prefix = settings('prefix') || '',
+// //         size = node[prefix + 'size'],
+// //         color = node.color || settings('defaultNodeColor'),
+// //         url = node.url;
 
-  // Let's add a public method to cache images, to make it possible to
-  // preload images before the initial rendering:
-  renderer.cache = function(url, callback) {
-    if (callback)
-      _callbacks[url] = callback;
+// //     if (_cache[url]) {
+// //       context.save();
 
-    if (_loading[url])
-      return;
+// //       // Draw the clipping disc:
+// //       context.beginPath();
+// //       context.arc(
+// //         node[prefix + 'x'],
+// //         node[prefix + 'y'],
+// //         node[prefix + 'size'],
+// //         0,
+// //         Math.PI * 2,
+// //         true
+// //       );
+// //       context.closePath();
+// //       context.clip();
 
-    var img = new Image();
+// //       // Draw the image
+// //       context.drawImage(
+// //         _cache[url],
+// //         node[prefix + 'x'] - size,
+// //         node[prefix + 'y'] - size,
+// //         2 * size,
+// //         2 * size
+// //       );
 
-    img.onload = function() {
-      _loading[url] = false;
-      _cache[url] = img;
+// //       // Quit the "clipping mode":
+// //       context.restore();
 
-      if (_callbacks[url]) {
-        _callbacks[url].call(this, img);
-        delete _callbacks[url];
-      }
-    };
+// //       // Draw the border:
+// //       context.beginPath();
+// //       context.arc(
+// //         node[prefix + 'x'],
+// //         node[prefix + 'y'],
+// //         node[prefix + 'size'],
+// //         0,
+// //         Math.PI * 2,
+// //         true
+// //       );
+// //       context.lineWidth = size / 5;
+// //       context.strokeStyle = node.color || settings('defaultNodeColor');
+// //       context.stroke();
+// //     } else {
+// //       sigma.canvas.nodes.image.cache(url);
+// //       sigma.canvas.nodes.def.apply(
+// //         sigma.canvas.nodes,
+// //         args
+// //       );
+// //     }
+// //   };
 
-    _loading[url] = true;
-    img.src = url;
-  };
+// //   // Let's add a public method to cache images, to make it possible to
+// //   // preload images before the initial rendering:
+// //   renderer.cache = function(url, callback) {
+// //     if (callback)
+// //       _callbacks[url] = callback;
 
-  return renderer;
-})();
+// //     if (_loading[url])
+// //       return;
 
-// get thumbnail url list
-function getThumbnailURLs(films){
-  var urls = [];
-  for ( var i = 0; i < films.length; i++){
-    urls.push('http://labocine.com/stills/' + films[i].id + '.jpg');
-  }
-  return urls;
-}
+// //     var img = new Image();
+
+// //     img.onload = function() {
+// //       _loading[url] = false;
+// //       _cache[url] = img;
+
+// //       if (_callbacks[url]) {
+// //         _callbacks[url].call(this, img);
+// //         delete _callbacks[url];
+// //       }
+// //     };
+
+// //     _loading[url] = true;
+// //     img.src = url;
+// //   };
+
+// //   return renderer;
+// // })();
+
+// // get thumbnail url list
+// function getThumbnailURLs(films){
+//   var urls = [];
+//   for ( var i = 0; i < films.length; i++){
+//     urls.push('http://labocine.com/stills/' + films[i].id + '.jpg');
+//   }
+//   return urls;
+// }
 
 
 // to create list of distinct tags
@@ -311,8 +316,8 @@ var i, j,
       nodes: [],
       edges: []
     },
-    loaded = 0,
-    urls = getThumbnailURLs(films);
+    loaded = 0;
+    // urls = getThumbnailURLs(films);
 
 // create tag vector and update film obj
 var tags = createTagVector(films);
@@ -330,8 +335,6 @@ g.nodes.push({
     y: .5,
     type: 'title',
     size: 2,
-    type:'image',
-    url: 'http://labocine.com/assets/img/cover/november.jpg',
     color: 'rgba(36,67,35,1)'
   });
 
@@ -345,8 +348,6 @@ for (i = 0; i < F; i++){
       label: films[i].title ,
       x: _x,
       y: _y,
-      url: urls[i],
-      type: 'image',
       size: 2.5,
       color: 'rgba(102,102,102,.1)'
   });
@@ -359,10 +360,11 @@ for (i = 0; i < T; i++){
       label: tags[i],
       x: Math.random(),
       y: Math.random(),
-      size: 0.1,
+      size: .5,
       color: 'rgba(153, 153, 153, .1)'
   });
 }
+
 
 // create edges from title to films
 for (i=0; i < F; i++){
@@ -396,116 +398,228 @@ for (i = 0; i < F; i++){
 }
 
 
-// Then, wait for all images to be loaded before instanciating sigma:
-function loadImages(){
-  urls.forEach(function(url) {
-    sigma.canvas.nodes.image.cache(url);
-  });
-}
+// // Then, wait for all images to be loaded before instanciating sigma:
+// function loadImages(){
+//   urls.forEach(function(url) {
+//     sigma.canvas.nodes.image.cache(url);
+//   });
+// }
 
-$.when(loadImages()).then(function(){
-  // Instantiate sigma:
-  s = new sigma({
-    graph: g,
-    renderer: {
-      // IMPORTANT:
-      // This works only with the canvas renderer, so the
-      // renderer type set as "canvas" is necessary here.
-      container: document.getElementById('graph-container'),
-      type: 'canvas'
-    },
-    settings: {
-      minNodeSize: 3,
-      maxNodeSize: 12,
-      // doubleClickEnabled: true
-    }
-  });
-
-  s.bind('overNode', function(event){
-
-    var nodeId = event.data.node.id;
-    var _message_div = $('.help-text');
-    $('.help-text-2').html();
-    if (nodeId === 'title'){
-      _message_div.html('Click node to see all films in this issue.')
-      _message_div.show();
-    }
-
-    else if (nodeId[0] === 't'){
-      _message_div.html('Click node to see all films related to this tag.')
-      _message_div.show();
-    }
-
-    else if (nodeId[0] === 'f'){
-      _message_div.html('Click node to see all tags related to this film.')
-      _message_div.show();
-    }
-
-  });
-
-  s.bind('outNode', function(){
-    $('.help-text').hide();
-  })
-
-  s.bind('clickNode',function(event){
-    var targetNode = event.data.node;
-    var nodeId = targetNode.id;
-
-    if (nodeId[0] === 'f'){
-      var url = getFilmURL(targetNode);
-      var _message_div = $('.help-text-2');
-      _message_div.html('Click <a href="' + url + '">here</a> to go to film.');
-      _message_div.show();
-    }
-
-    // mute all nodes
-    $(s.graph.nodes()).each(function(){
-      mute(this);
-    });
-
-    // mute all edges
-    $(s.graph.edges()).each(function(){
-      mute(this);
-    });
-
-    // unmute target node
-    unmute(targetNode);
-
-    // get neighbours
-    var neighbours = s.graph.neighborhood(nodeId);
-    
-    // unmute neghbourhood nodes
-    $(neighbours.nodes).each(function(){
-      unmute(this);
-    });
-
-    // unmute neighbourhood edges
-    $(neighbours.edges).each(function(){
-      unmute(this);
-    });
-    
-  });
-
-  s.bind('doubleClickNode',function(event){
-
-    var targetNode = event.data.node;
-
-    // check if node is of type image
-    if (targetNode.id[0] === 'f'){
-      var url = getFilmURL(targetNode);
-      window.location = url;
-    }
-  });
+// Instantiate sigma:
+s = new sigma({
+  graph: g,
+  settings: {
+    enableHovering: true
+  }
 });
 
+s.addRenderer({
+  id: 'main',
+  type: 'svg',
+  container: document.getElementById('graph-container'),
+  freeStyle: false
+});
+
+s.refresh();
+
+// $('.sigma-node').click(function() {
+
+//   // Muting
+//   $('.sigma-node, .sigma-edge').each(function() {
+//     mute(this);
+//   });
+
+//   // Unmuting neighbors
+//   var neighbors = s.graph.neighborhood($(this).attr('data-node-id'));
+//   neighbors.nodes.forEach(function(node) {
+//     unmute($('[data-node-id="' + node.id + '"]')[0]);
+//   });
+
+//   neighbors.edges.forEach(function(edge) {
+//     unmute($('[data-edge-id="' + edge.id + '"]')[0]);
+//   });
+// });
+
+s.bind('overNode', function(event){
+  var nodeId = event.data.node.id;
+  var _message_div = $('.help-text');
+  $('.help-text-2').html();
+  if (nodeId === 'title'){
+    _message_div.html('Click node to see all films in this issue.')
+    _message_div.show();
+  }
+
+  else if (nodeId[0] === 't'){
+    _message_div.html('Click node to see all films related to this tag.')
+    _message_div.show();
+  }
+
+  else if (nodeId[0] === 'f'){
+    _message_div.html('Click node to see all tags related to this film.')
+    _message_div.show();
+  }
+
+});
+
+s.bind('outNode', function(){
+  $('.help-text').hide();
+})
+
+s.bind('clickNode',function(event){
+  var targetNode = event.data.node;
+  var nodeId = targetNode.id;
+
+  if (nodeId[0] === 'f'){
+    var url = '';
+    var _message_div = $('.help-text-2');
+    _message_div.html('Click <a href="' + url + '">here</a> to go to film.');
+    _message_div.show();
+  }
+
+  // mute all nodes
+  $(s.graph.nodes()).each(function(){
+    mute(this);
+  });
+
+  // mute all edges
+  $(s.graph.edges()).each(function(){
+    mute(this);
+  });
+
+  // unmute target node
+  unmute(targetNode);
+
+  // get neighbours
+  var neighbours = s.graph.neighborhood(nodeId);
+  
+  // unmute neghbourhood nodes
+  $(neighbours.nodes).each(function(){
+    unmute(this);
+  });
+
+  // unmute neighbourhood edges
+  $(neighbours.edges).each(function(){
+    console.log(this);
+
+    unmute(this);
+  });
+  
+});
+
+//   // s.bind('doubleClickNode',function(event){
+
+//   //   var targetNode = event.data.node;
+
+//   //   // check if node is of type image
+//   //   if (targetNode.id[0] === 'f'){
+//   //     var url = getFilmURL(targetNode);
+//   //     window.location = url;
+//   //   }
+//   // });
+
+// // $.when(loadImages()).then(function(){
+// //   // Instantiate sigma:
+// //   s = new sigma({
+// //     graph: g,
+// //     renderer: {
+// //       // IMPORTANT:
+// //       // This works only with the canvas renderer, so the
+// //       // renderer type set as "canvas" is necessary here.
+// //       container: document.getElementById('graph-container'),
+// //       type: 'canvas'
+// //     },
+// //     settings: {
+// //       minNodeSize: 3,
+// //       maxNodeSize: 12,
+// //       // doubleClickEnabled: true
+// //     }
+// //   });
+
+// //   s.bind('overNode', function(event){
+
+// //     var nodeId = event.data.node.id;
+// //     var _message_div = $('.help-text');
+// //     $('.help-text-2').html();
+// //     if (nodeId === 'title'){
+// //       _message_div.html('Click node to see all films in this issue.')
+// //       _message_div.show();
+// //     }
+
+// //     else if (nodeId[0] === 't'){
+// //       _message_div.html('Click node to see all films related to this tag.')
+// //       _message_div.show();
+// //     }
+
+// //     else if (nodeId[0] === 'f'){
+// //       _message_div.html('Click node to see all tags related to this film.')
+// //       _message_div.show();
+// //     }
+
+// //   });
+
+// //   s.bind('outNode', function(){
+// //     $('.help-text').hide();
+// //   })
+
+// //   s.bind('clickNode',function(event){
+// //     var targetNode = event.data.node;
+// //     var nodeId = targetNode.id;
+
+// //     if (nodeId[0] === 'f'){
+// //       var url = getFilmURL(targetNode);
+// //       var _message_div = $('.help-text-2');
+// //       _message_div.html('Click <a href="' + url + '">here</a> to go to film.');
+// //       _message_div.show();
+// //     }
+
+// //     // mute all nodes
+// //     $(s.graph.nodes()).each(function(){
+// //       mute(this);
+// //     });
+
+// //     // mute all edges
+// //     $(s.graph.edges()).each(function(){
+// //       mute(this);
+// //     });
+
+// //     // unmute target node
+// //     unmute(targetNode);
+
+// //     // get neighbours
+// //     var neighbours = s.graph.neighborhood(nodeId);
+    
+// //     // unmute neghbourhood nodes
+// //     $(neighbours.nodes).each(function(){
+// //       unmute(this);
+// //     });
+
+// //     // unmute neighbourhood edges
+// //     $(neighbours.edges).each(function(){
+// //       unmute(this);
+// //     });
+    
+// //   });
+
+// //   s.bind('doubleClickNode',function(event){
+
+// //     var targetNode = event.data.node;
+
+// //     // check if node is of type image
+// //     if (targetNode.id[0] === 'f'){
+// //       var url = getFilmURL(targetNode);
+// //       window.location = url;
+// //     }
+// //   });
+// // });
+
 // get redirect link from node
-function getFilmURL(node){
-  var url = node.url;
-  url = url.replace('.jpg', '');
-  url = url.replace('http://labocine.com/stills/', '');
-  url = 'http://labocine.com/film/' + url;
-  return url;
-}
+// function getFilmURL(node){
+//   var url = node.url;
+//   url = url.replace('.jpg', '');
+//   url = url.replace('http://labocine.com/stills/', '');
+//   url = 'http://labocine.com/film/' + url;
+//   return url;
+// }
 
 // get RGB values
 function getRGB(rgb){ 

@@ -206,11 +206,22 @@ function search_term(query_term, play_type){
 				if (play_type == 'grid'){
 					$.when(populate_grid(data, _search_results)).done(function(){
 						$.when(instantiate_video_popcorn(data.number_of_results)).done(function(){
-							$('.instructions').html();
-							$('.search-results').removeClass('instructions');
-							for (var i = 0; i < data.number_of_results; i++){
-								setup_video(i, data.results[i]['snippets']);
-							}
+							
+							$.when(function(){
+								for (var i = 0; i < data.number_of_results; i++){
+									setup_video(i, data.results[i]['snippets']);
+									
+								}
+							}).done(function(){
+								
+								_search_results.show();
+								$('.instructions').hide();
+							});
+
+							
+
+							// _search_results.show();
+							// $('instructions').hide();
 							
 						});
 					});	
@@ -232,7 +243,7 @@ function search_term(query_term, play_type){
 			// if no search results returned
 			else{
 
-				$('.search-results').html('No Results Found');
+				$('.instructions').html('No Results Found for "' + query_term + '"');
 			}
 
 		}

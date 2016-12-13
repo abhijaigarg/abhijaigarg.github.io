@@ -43,7 +43,7 @@
 
         <a href="#" class="btn btn-montage" role="button" data-toggle="tooltip" data-placement="bottom" title="The Montage creates a generative video experience. We scan through all our films and create a new combined video with all relevant snippets. There are a lot of films, so sit back and relax while we load the montage for you!">Montage <img src="images/external-link.png"/></a>
       </div>
-
+      <div class="instructions"></div>
    		<div class="search-results"></div>
 
       <div class="footer">&copy; Labocine Blast. A <a href="http://labocine.com">Labocine</a> Labs project.</div>
@@ -61,11 +61,12 @@
     <!-- <script src="js/popcorn-1.5.11/popcorn.js"></script> -->
     <script src="script.js"></script>
     <script>
+    $('.instructions').html('<img src="images/labocine-loading.gif" height="140px"/><br/><br/>Let Blast do its magic. Give us a few seconds.');
+    $('.search-results').hide();
       $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip(); 
         var query_term = getURLParameter('search-term');
-        $('.search-results').addClass('instructions');
-        $('.instructions').html('<img src="images/labocine-loading.gif" height="140px"/><br/><br/>Let Blast do its magic. Give us a few seconds.');
+
 
         if (query_term !== undefined && query_term !== ''){
           search_term(query_term, 'grid');
