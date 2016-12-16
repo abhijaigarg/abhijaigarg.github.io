@@ -46,6 +46,8 @@ function shuffle(array){
 }
 
 function get_sequence(data){
+	var SUBSET = 10;
+	var SUBSET_THRESHOLD = 0.5;
 	var sequence = new Array();
 	for(var i = 0; i < data.number_of_results; i++){
 		for(var j = 0; j < data.results[i]['snippets'].length; j++){
@@ -57,10 +59,10 @@ function get_sequence(data){
 	} 
 	sequence = shuffle(sequence);
 
-	var sliceVal = 0.3*sequence.length;
+	var sliceVal = SUBSET_THRESHOLD*sequence.length;
 
-	if (sliceVal > 15){
-		sliceVal = 15;
+	if (sliceVal > SUBSET){
+		sliceVal = SUBSET;
 	}
 	return sequence.slice(sliceVal);
 }
@@ -97,7 +99,7 @@ function populate_modal_window(data, query_term, n){
 		montage.eq(i).on('loadeddata', function(){
 			_loaded++;
 			$('.percent').html(Math.floor(_loaded*100/sequence.length));
-			
+
 			if (_loaded == Math.floor(sequence.length*LOAD_THRESHOLD)){
 				$('#myModal').modal('show');
 				montage.play();
