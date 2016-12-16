@@ -13,7 +13,7 @@
  */
 
 var video_items;
-var montage;
+// var montage;
 
 
 /*
@@ -56,7 +56,13 @@ function get_sequence(data){
 		}
 	} 
 	sequence = shuffle(sequence);
-	return sequence;
+
+	var sliceVal = 0.3*sequence.length;
+
+	if (sliceVal > 15){
+		sliceVal = 15;
+	}
+	return sequence.slice(sliceVal);
 }
 
 
@@ -80,7 +86,24 @@ function populate_modal_window(data, query_term, n){
 	// set up first video and queue others
 	var sequence = get_sequence(data);
 
-	montage = Popcorn.sequence('montage', sequence);
+	var	montage = Popcorn.sequence('montage', sequence);
+	var _loaded = 0;
+	var LOAD_THRESHOLD = 0.9;
+
+
+
+	// wait till all videos can play through
+	for (var i = 0; i < sequence.length; i++){
+		montage.eq(i).on('loadeddata', function(){
+			_loaded++;
+			$('.percent').html(Math.floor(_loaded*100/sequence.length));
+			
+			if (_loaded == Math.floor(sequence.length*LOAD_THRESHOLD)){
+				$('#myModal').modal('show');
+				montage.play();
+			}
+		});
+	}
 
 }
 
@@ -218,11 +241,6 @@ function search_term(query_term, play_type){
 								$('.instructions').hide();
 							});
 
-							
-
-							// _search_results.show();
-							// $('instructions').hide();
-							
 						});
 					});	
 				}
@@ -231,12 +249,8 @@ function search_term(query_term, play_type){
 				else if (play_type == 'montage'){
 					// wait for populate_modal_window to end before play is triggered
 
-					$.when(populate_modal_window(data, query_term, data.number_of_results)).done(function(){
-						$('.instructions').html();
-						$('#myModal').modal('show');
-						montage.play();
-						
-					});
+					populate_modal_window(data, query_term, data.number_of_results);
+
 				}
 			}
 
@@ -248,9 +262,8 @@ function search_term(query_term, play_type){
 
 		}
 	});
-
-
 }
+
 
 
 /*
