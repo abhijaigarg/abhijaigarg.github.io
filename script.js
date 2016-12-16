@@ -46,7 +46,7 @@ function shuffle(array){
 }
 
 function get_sequence(data){
-	var SUBSET = 10;
+	var SUBSET = 12;
 	var SUBSET_THRESHOLD = 0.5;
 	var sequence = new Array();
 	for(var i = 0; i < data.number_of_results; i++){
@@ -61,8 +61,8 @@ function get_sequence(data){
 
 	var sliceVal = SUBSET_THRESHOLD*sequence.length;
 
-	if (sliceVal > SUBSET){
-		sliceVal = SUBSET;
+	if (sequence.length - sliceVal > SUBSET){
+		sliceVal = sequence.length - SUBSET;
 	}
 	return sequence.slice(sliceVal);
 }
@@ -90,7 +90,7 @@ function populate_modal_window(data, query_term, n){
 
 	var	montage = Popcorn.sequence('montage', sequence);
 	var _loaded = 0;
-	var LOAD_THRESHOLD = 0.9;
+	var LOAD_THRESHOLD = 0.75;
 
 
 
@@ -188,7 +188,6 @@ function start_stop_times(popcorn_element,j,snippets){
 				_start += 1;
 			}
 
-			
 			popcorn_element.currentTime(_start);
 		}
 	})
